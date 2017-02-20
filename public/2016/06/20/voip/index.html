@@ -6,17 +6,18 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Archives | oopsr的个人博客</title>
+  <title>iOS利用voip push实现类似微信(QQ)电话连续响铃效果 | oopsr的个人博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="ios/android开发工程师">
-<meta property="og:type" content="website">
-<meta property="og:title" content="oopsr的个人博客">
-<meta property="og:url" content="http://yoursite.com/archives/index.html">
+  <meta name="description" content="由于项目中添加了视频语音呼叫功能，某一天老总说要做保活，并拿出手机演示微信的音视频呼叫功能，微信在APP被杀死和黑屏的情况下都能收到呼叫并且能连续响铃和振动。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS利用voip push实现类似微信(QQ)电话连续响铃效果">
+<meta property="og:url" content="http://yoursite.com/2016/06/20/voip/index.html">
 <meta property="og:site_name" content="oopsr的个人博客">
-<meta property="og:description" content="ios/android开发工程师">
+<meta property="og:description" content="由于项目中添加了视频语音呼叫功能，某一天老总说要做保活，并拿出手机演示微信的音视频呼叫功能，微信在APP被杀死和黑屏的情况下都能收到呼叫并且能连续响铃和振动。">
+<meta property="og:updated_time" content="2017-02-20T11:16:38.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="oopsr的个人博客">
-<meta name="twitter:description" content="ios/android开发工程师">
+<meta name="twitter:title" content="iOS利用voip push实现类似微信(QQ)电话连续响铃效果">
+<meta name="twitter:description" content="由于项目中添加了视频语音呼叫功能，某一天老总说要做保活，并拿出手机演示微信的音视频呼叫功能，微信在APP被杀死和黑屏的情况下都能收到呼叫并且能连续响铃和振动。">
   
     <link rel="alternative" href="/atom.xml" title="oopsr的个人博客" type="application/atom+xml">
   
@@ -144,36 +145,63 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-voip" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2016" class="archive-year">2016</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2016/06/20/voip/" class="archive-article-date">
-  	<time datetime="2016-06-20T09:04:10.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-06-20</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2016/06/20/voip/">iOS利用voip push实现类似微信(QQ)电话连续响铃效果</a>
+    <h1 class="article-title" itemprop="name">
+      iOS利用voip push实现类似微信(QQ)电话连续响铃效果
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
+        
+        <a href="/2016/06/20/voip/" class="archive-article-date">
+  	<time datetime="2016-06-20T09:04:10.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-06-20</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>由于项目中添加了视频语音呼叫功能，某一天老总说要做保活，并拿出手机演示微信的音视频呼叫功能，微信在APP被杀死和黑屏的情况下都能收到呼叫并且能连续响铃和振动。<a id="more"></a>当时脑子第一个想法是APNs去实现，但是APNs根本实现不了连续通知，就算连续推送也不可能只显示一个通知栏，然后又想到本地通知是可以实现连续响铃效果，但是当APP被杀死或者至于后台根本没办法启动本地通知，所以这个问题的切入点就是APP死了，怎么去激活？后面通过翻墙搜索发现VoIP可以实现激活应用，当时国内几乎搜索不到关于VoIP 推送的介绍，只好对着开发手册搞了。好了，直入正题了。</p>
+<h3 id="1、关于voip"><a href="#1、关于voip" class="headerlink" title="1、关于voip"></a>1、关于voip</h3><p>  VoIP 推送基于pushKit框架。以前应用保活是通过与服务器发送周期性的心跳来维持，这样会导致设备被频繁唤醒，消耗电量，类似现在android系统的保活。为了代替永久连接机制，苹果开发人员使用Pushkit框架。使用PushKit接收VoIP推送有很多好处：<br> <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">只有当VoIP发生推送时，设备才会唤醒，从而节省能源。</div><div class="line">VoIP推送被认为是高优先级通知，并且毫无延迟地传送。</div><div class="line">VoIP推送可以包括比标准推送通知提供的数据更多的数据。</div><div class="line">如果收到VoIP推送时，您的应用程序未运行，则会自动重新启动。</div><div class="line">即使您的应用在后台运行，您的应用也会在运行时处理推送。</div></pre></td></tr></table></figure></p>
+<p>最后两点正是我们想要的。另外很多人都认为APNs可以激活应用，经过我多种测试，APNs不管怎么更换推送payload的格式，都无法激活应用，要是能也不至于多此一举弄个VoIP推送了。还有很多人担心自己的APP使用VOIP推送会被拒，官方上解释说，必须是VoIP应用才能集成，其实不一定要是VoIP应用，只要你的应用中有类似视频呼叫或者语音呼叫的功能都能通过审核，后面我也会提到怎么样才能通过审核，要是没有相关功能就不用考虑了。</p>
+<h3 id="2、VoIP的集成和建立本地测试"><a href="#2、VoIP的集成和建立本地测试" class="headerlink" title="2、VoIP的集成和建立本地测试"></a>2、VoIP的集成和建立本地测试</h3><h4 id="2-1、在应用中启用"><a href="#2-1、在应用中启用" class="headerlink" title="2.1、在应用中启用"></a>2.1、在应用中启用</h4>
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="https://github.com/oopsr/oopsr.github.io/blob/master/img/alipay.png">
+                      <span class="reward-type">支付宝</span>
+                    </div>
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
@@ -197,61 +225,106 @@
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://yoursite.com/2016/06/20/voip/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2016/04/22/hello-world/" class="archive-article-date">
-  	<time datetime="2016-04-22T07:08:32.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-04-22</time>
-</a>
-        </div>
-    	 
+<nav id="article-nav">
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2016/04/22/hello-world/">Hello World</a>
-    </h1>
+  
+    <a href="/2016/04/22/hello-world/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Hello World</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+
+
+
+
+  
+  <div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="voip" data-title="iOS利用voip push实现类似微信(QQ)电话连续响铃效果" data-url="http://yoursite.com/2016/06/20/voip/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"oops"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">第一篇</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">开心</a>
-        		</li>
-      		
-		</ul>
-	</div>
 
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
-
-    
 
 
           </div>
@@ -274,8 +347,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
