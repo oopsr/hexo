@@ -2,14 +2,14 @@
 
 menu:
   主页: /
-  随笔: /tags/随笔/
+ 
 
 # SubNav
 subnav:
-  github: "#"
-  weibo: "#"
-  rss: "#"
-  zhihu: "#"
+  github: "https://github.com/oopsr"
+  weibo: "/"
+  rss: "/"
+  zhihu: "/"
   
 rss: /atom.xml
 
