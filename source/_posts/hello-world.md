@@ -1,38 +1,42 @@
 ---
 title: Hello World
+date: 2016-04-22 15:08:32
+tags:
+     - 第一篇
+     - 开心
 ---
-Welcome to [Hexo](https://hexo.io/)! This is your very first post. Check [documentation](https://hexo.io/docs/) for more info. If you get any problems when using Hexo, you can find the answer in [troubleshooting](https://hexo.io/docs/troubleshooting.html) or you can ask me on [GitHub](https://github.com/hexojs/hexo/issues).
+ 周末利用空闲时间搭建了属于自己的个人博客，其实两年前就有这个想法了，后面因为各种原因就把这个事情给落下了，以前的事情就不提了，接下来让我把落下的慢慢的补上吧，毕竟出来混，终究是要还的...
+<!-- more -->
+## 标题
 
-## Quick Start
-
-### Create a new post
-
-``` bash
-$ hexo new "My New Post"
-```
-
-More info: [Writing](https://hexo.io/docs/writing.html)
-
-### Run server
+### 第一点
 
 ``` bash
-$ hexo server
+$ 内容1
 ```
 
-More info: [Server](https://hexo.io/docs/server.html)
+链接: [Writing](https://hexo.io/docs/writing.html)
 
-### Generate static files
+### 第二点
 
 ``` bash
-$ hexo generate
+$ 内容
 ```
 
-More info: [Generating](https://hexo.io/docs/generating.html)
+链接: [Server](https://hexo.io/docs/server.html)
 
-### Deploy to remote sites
+### 第二点
 
 ``` bash
-$ hexo deploy
+$ 内容
 ```
 
-More info: [Deployment](https://hexo.io/docs/deployment.html)
+链接: [Generating](https://hexo.io/docs/generating.html)
+
+### 第四点
+
+``` bash
+$ 内容
+```
+
+链接: [Deployment](https://hexo.io/docs/deployment.html)
